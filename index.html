@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
 :root{--blue:#213153;--blue-dark:#18243d;--soft:#f8faff;--line:#cfd6e4;--green:#16875d;--orange:#f59e0b;--red:#b42318;--ink:#202633}
-*{box-sizing:border-box}html,body{min-height:100%;margin:0;font-family:Arial,sans-serif;color:var(--ink);background:var(--blue)}body{padding:30px 20px}.wrapper{display:flex;flex-direction:column;gap:20px;width:100%;max-width:1400px;margin:auto}.box,.card{padding:20px;background:#fff;border-radius:10px;box-shadow:2px 2px 10px #0003;text-align:center}.brand{display:grid;grid-template-columns:220px 1fr 220px;align-items:center;gap:20px}.brand img{max-width:200px;max-height:90px;object-fit:contain}.brand-spacer{width:200px}h1,h2{margin:0;color:var(--blue)}h1{text-align:center;font-size:28px}.content-wrap{width:100%;max-width:960px;margin:0 auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}.card{display:flex;height:455px;flex-direction:column;gap:12px;min-width:0}.card h2{font-size:20px}label{color:var(--blue);font-size:13px;font-weight:bold}textarea{width:100%;height:255px;flex:0 0 255px;padding:12px;text-align:center;border:1px solid var(--line);border-radius:8px;resize:vertical;font:14px/1.5 Consolas,monospace}textarea:focus{outline:2px solid #f59e0b55;border-color:var(--orange)}.km-info{display:flex;height:124px;min-height:124px;padding:14px;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:#475467;font-size:13px;line-height:1.5}.fleet-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:255px;align-items:stretch}.required{display:flex;height:255px;padding:14px;flex-direction:column;justify-content:center;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:#475467;font-size:13px;line-height:1.45}.required strong{display:block;margin-bottom:7px;color:var(--blue)}.required span{display:block;text-align:center}.dropzone{display:flex;height:100%;min-height:255px;align-self:stretch;padding:18px;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px dashed var(--line);border-radius:10px;background:var(--soft);cursor:pointer}.dropzone.drag{border-color:var(--orange);background:#fff8e8}.dropzone strong{color:var(--blue);font-size:17px}.file-name{margin-top:12px;text-align:center;font-size:13px;font-weight:bold;word-break:break-word}input[type=file]{display:none}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{width:100%;min-height:52px;padding:10px 14px;border:0;border-radius:8px;color:#fff;background:var(--blue);font-size:15px;font-weight:700;cursor:pointer}button:hover:not(:disabled){background:var(--blue-dark)}button:disabled{background:#c7cbd3;cursor:not-allowed}#process{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green)}.button-text{display:inline-block;line-height:1.05}.excel-icon{display:inline-flex;width:23px;height:23px;align-items:center;justify-content:center;border-radius:2px;background:#46a57b;color:#fff;box-shadow:inset 0 0 0 1px #ffffff2e}.excel-sheet{display:inline-flex;width:13px;height:16px;align-items:center;justify-content:center;border-left:3px solid #fff;background:#ffffff22;color:#fff;font-size:12px;line-height:1}#clear{color:var(--blue);background:var(--orange)}.progress{display:flex;height:58px;flex:0 0 58px;padding:10px 14px;flex-direction:column;justify-content:center;border:1px solid var(--line);border-radius:8px;background:#fff;visibility:hidden}.progress.show{visibility:visible}.progress.success{visibility:visible;color:#0d6745;background:#e9f8f1;border-color:#b9e7d3}.progress.success .track{display:none}.progress.success .progress-text{margin:0;text-align:center;font-weight:bold}.progress-text{margin-bottom:6px;color:#555;font-size:12px}.track{height:9px;overflow:hidden;background:#e4e8ef;border-radius:10px}.bar{width:0;height:100%;background:var(--blue);transition:width .2s}.supplier-guide{width:100%;max-width:960px;margin:0 auto}.supplier-content{display:grid;max-height:0;gap:10px;overflow:hidden;opacity:0;transition:max-height .5s ease,opacity .25s ease,padding .35s ease;padding:0}.supplier-content.open{max-height:10000px;opacity:1;padding-top:14px;padding-bottom:6px}.supplier-row{display:grid;grid-template-columns:220px 150px 54px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch}.supplier-name,.supplier-portal,.supplier-detail-toggle,.supplier-detail{min-height:54px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--blue);box-shadow:1px 1px 6px #0002}.supplier-name{display:flex;padding:10px 14px;align-items:center;justify-content:center;font-weight:700;text-align:center}.supplier-portal{display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;background:var(--green);color:#fff}.supplier-portal:hover{background:#11744f}.supplier-portal.disabled{background:#d6dae2;color:#687386;cursor:not-allowed;pointer-events:none}.supplier-detail-toggle{display:flex;width:54px;min-width:54px;padding:0;align-items:center;justify-content:center;background:#fff;color:var(--blue);font-size:22px}.supplier-detail-toggle:hover,.supplier-detail-toggle:hover:not(:disabled){background:#fff4de !important;color:var(--blue) !important}.supplier-detail-toggle.open{background:#fff4de}.supplier-detail-toggle span{transition:transform .25s}.supplier-detail-toggle.open span{transform:rotate(180deg)}.supplier-detail{display:none;padding:14px;text-align:left;line-height:1.45;white-space:pre-wrap}.supplier-detail.show{display:block}.supplier-detail strong{display:block;margin-bottom:6px;color:var(--blue)}.manual{width:100%;max-width:960px;margin:0 auto}.manual-toggle{display:grid;width:100%;min-height:58px;padding:12px 18px;grid-template-columns:48px 1fr 48px;align-items:center;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--blue);box-shadow:2px 2px 10px #0003;font-size:16px;font-weight:700;cursor:pointer}.manual-toggle:hover,.manual-toggle:hover:not(:disabled){background:#fff4de !important;color:#213153 !important}.manual-arrow{display:flex;align-items:center;justify-content:center;font-size:25px;line-height:1;height:100%;transition:transform .25s}.manual-arrow:first-child{text-align:left}.manual-arrow:last-child{text-align:right}.manual-toggle.open .manual-arrow{transform:rotate(180deg)}.manual-content{display:grid;max-height:0;gap:14px;overflow:hidden;opacity:0;transition:max-height .45s ease,opacity .25s ease,padding .35s ease;padding:0}.manual-content.open{max-height:2400px;opacity:1;padding-top:14px;padding-bottom:6px}.manual-step{display:grid;width:100%;grid-template-columns:minmax(260px,38%) minmax(0,62%);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:2px 2px 10px #0003}.manual-text{display:flex;min-height:230px;padding:24px;align-items:center;justify-content:center;text-align:left;color:var(--blue);font-size:15px;line-height:1.55}.manual-text>div{width:100%}.manual-text ol{margin:0;padding-left:24px}.manual-text li{margin:7px 0}.manual-image{display:flex;min-height:230px;padding:14px;align-items:center;justify-content:center;border-left:1px solid var(--line);background:var(--soft)}.manual-image img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;border-radius:6px}.manual-image img[data-failed=true]{display:none}@media(max-width:850px){.content-wrap{max-width:100%}.grid{grid-template-columns:1fr}.supplier-row{grid-template-columns:1fr 120px 54px}.supplier-detail{grid-column:1/-1}.manual-step{grid-template-columns:1fr}.manual-image{border-left:0;border-top:1px solid var(--line)}}@media(max-width:650px){body{padding:15px 10px}.brand{grid-template-columns:1fr;justify-items:center}.brand-spacer{display:none}.fleet-area,.actions{grid-template-columns:1fr}.card{height:auto}.fleet-area{height:auto}.required,.dropzone{height:255px}.km-info{height:auto;min-height:124px}}
+*{box-sizing:border-box}html,body{min-height:100%;margin:0;font-family:Arial,sans-serif;color:var(--ink);background:var(--blue)}body{padding:30px 20px}.wrapper{display:flex;flex-direction:column;gap:20px;width:100%;max-width:1400px;margin:auto}.box,.card{padding:20px;background:#fff;border-radius:10px;box-shadow:2px 2px 10px #0003;text-align:center}.brand{display:grid;grid-template-columns:220px 1fr 220px;align-items:center;gap:20px}.brand img{max-width:200px;max-height:90px;object-fit:contain}.brand-spacer{width:200px}h1,h2{margin:0;color:var(--blue)}h1{text-align:center;font-size:28px}.content-wrap{width:100%;max-width:960px;margin:0 auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}.card{display:flex;height:455px;flex-direction:column;gap:12px;min-width:0}.card h2{font-size:20px}label{color:var(--blue);font-size:13px;font-weight:bold}textarea{width:100%;height:255px;flex:0 0 255px;padding:12px;text-align:center;border:1px solid var(--line);border-radius:8px;resize:vertical;font:14px/1.5 Consolas,monospace}textarea:focus{outline:2px solid #f59e0b55;border-color:var(--orange)}.km-info{display:flex;height:124px;min-height:124px;padding:14px;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:#475467;font-size:13px;line-height:1.5}.fleet-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:255px;align-items:stretch}.required{display:flex;height:255px;padding:14px;flex-direction:column;justify-content:center;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--soft);color:#475467;font-size:13px;line-height:1.45}.required strong{display:block;margin-bottom:7px;color:var(--blue)}.required span{display:block;text-align:center}.dropzone{display:flex;height:100%;min-height:255px;align-self:stretch;padding:18px;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px dashed var(--line);border-radius:10px;background:var(--soft);cursor:pointer}.dropzone.drag{border-color:var(--orange);background:#fff8e8}.dropzone strong{color:var(--blue);font-size:17px}.file-name{margin-top:12px;text-align:center;font-size:13px;font-weight:bold;word-break:break-word}input[type=file]{display:none}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{width:100%;min-height:52px;padding:10px 14px;border:0;border-radius:8px;color:#fff;background:var(--blue);font-size:15px;font-weight:700;cursor:pointer}button:hover:not(:disabled){background:var(--blue-dark)}button:disabled{background:#c7cbd3;cursor:not-allowed}#process{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green)}.button-text{display:inline-block;line-height:1.05}.excel-icon{display:inline-flex;width:23px;height:23px;align-items:center;justify-content:center;border-radius:2px;background:#46a57b;color:#fff;box-shadow:inset 0 0 0 1px #ffffff2e}.excel-sheet{display:inline-flex;width:13px;height:16px;align-items:center;justify-content:center;border-left:3px solid #fff;background:#ffffff22;color:#fff;font-size:12px;line-height:1}#clear{color:var(--blue);background:var(--orange)}.progress{display:flex;height:58px;flex:0 0 58px;padding:10px 14px;flex-direction:column;justify-content:center;border:1px solid var(--line);border-radius:8px;background:#fff;visibility:hidden}.progress.show{visibility:visible}.progress.success{visibility:visible;color:#0d6745;background:#e9f8f1;border-color:#b9e7d3}.progress.success .track{display:none}.progress.success .progress-text{margin:0;text-align:center;font-weight:bold}.progress-text{margin-bottom:6px;color:#555;font-size:12px}.track{height:9px;overflow:hidden;background:#e4e8ef;border-radius:10px}.bar{width:0;height:100%;background:var(--blue);transition:width .2s}.supplier-guide{width:100%;max-width:960px;margin:0 auto}.supplier-content{display:grid;max-height:0;gap:10px;overflow:hidden;opacity:0;transition:max-height .5s ease,opacity .25s ease,padding .35s ease;padding:0}.supplier-content.open{max-height:10000px;opacity:1;padding-top:14px;padding-bottom:6px}.supplier-row{display:grid;grid-template-columns:220px 95px 54px minmax(0,1fr);grid-template-rows:auto auto;gap:10px;align-items:start}.supplier-name,.supplier-portal,.supplier-detail-toggle,.supplier-detail{border:1px solid var(--line);border-radius:8px;box-shadow:1px 1px 6px #0002}.supplier-name,.supplier-portal,.supplier-detail-toggle{grid-row:1;height:54px;min-height:54px;max-height:54px}.supplier-name{grid-column:1;display:flex;padding:10px 14px;align-items:center;justify-content:center;background:#fff;color:var(--blue);font-weight:700;text-align:center}.supplier-portal{grid-column:2;display:flex;align-items:center;justify-content:center;background:#4b5563;color:#e5e7eb;text-decoration:none;font-weight:700}.supplier-portal:hover{background:#374151;color:#f3f4f6}.supplier-portal.disabled{background:#5f6875;color:#d1d5db;cursor:not-allowed;pointer-events:none}.supplier-detail-toggle{grid-column:3;display:flex;width:54px;min-width:54px;padding:0;align-items:center;justify-content:center;background:#ffd08a;color:#c65911;font-size:24px}.supplier-detail-toggle:hover,.supplier-detail-toggle:hover:not(:disabled){background:#ffc266 !important;color:#a94708 !important}.supplier-detail-toggle.open{background:#ffc266;color:#a94708}.supplier-detail-toggle span{display:inline-block;transition:transform .25s}.supplier-detail-toggle.open span{transform:rotate(180deg)}.supplier-detail{display:none;grid-column:4;min-height:78px;padding:16px;align-items:center;justify-content:center;background:#fff;color:var(--blue);text-align:center;line-height:1.5;white-space:pre-wrap;overflow:visible}.supplier-detail.show{display:flex;flex-direction:column}.supplier-detail.navigation-detail{grid-row:1}.supplier-detail.columns-detail{grid-row:2}.supplier-detail strong{display:block;margin-bottom:7px;color:var(--blue)}.manual{width:100%;max-width:960px;margin:0 auto}.manual-toggle{display:grid;width:100%;min-height:58px;padding:12px 18px;grid-template-columns:48px 1fr 48px;align-items:center;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--blue);box-shadow:2px 2px 10px #0003;font-size:16px;font-weight:700;cursor:pointer}.manual-toggle:hover,.manual-toggle:hover:not(:disabled){background:#fff4de !important;color:#213153 !important}.manual-arrow{display:flex;align-items:center;justify-content:center;font-size:25px;line-height:1;height:100%;transition:transform .25s}.manual-arrow:first-child{text-align:left}.manual-arrow:last-child{text-align:right}.manual-toggle.open .manual-arrow{transform:rotate(180deg)}.manual-content{display:grid;max-height:0;gap:14px;overflow:hidden;opacity:0;transition:max-height .45s ease,opacity .25s ease,padding .35s ease;padding:0}.manual-content.open{max-height:2400px;opacity:1;padding-top:14px;padding-bottom:6px}.manual-step{display:grid;width:100%;grid-template-columns:minmax(260px,38%) minmax(0,62%);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:2px 2px 10px #0003}.manual-text{display:flex;min-height:230px;padding:24px;align-items:center;justify-content:center;text-align:left;color:var(--blue);font-size:15px;line-height:1.55}.manual-text>div{width:100%}.manual-text ol{margin:0;padding-left:24px}.manual-text li{margin:7px 0}.manual-image{display:flex;min-height:230px;padding:14px;align-items:center;justify-content:center;border-left:1px solid var(--line);background:var(--soft)}.manual-image img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;border-radius:6px}.manual-image img[data-failed=true]{display:none}@media(max-width:850px){.content-wrap{max-width:100%}.grid{grid-template-columns:1fr}.supplier-row{grid-template-columns:1fr 90px 54px;grid-template-rows:54px auto auto}.supplier-detail{grid-column:1/-1}.supplier-detail.navigation-detail{grid-row:2}.supplier-detail.columns-detail{grid-row:3}.manual-step{grid-template-columns:1fr}.manual-image{border-left:0;border-top:1px solid var(--line)}}@media(max-width:650px){body{padding:15px 10px}.brand{grid-template-columns:1fr;justify-items:center}.brand-spacer{display:none}.fleet-area,.actions{grid-template-columns:1fr}.card{height:auto}.fleet-area{height:auto}.required,.dropzone{height:255px}.km-info{height:auto;min-height:124px}}
 </style>
 </head>
 <body><div class="wrapper">
@@ -32,40 +32,23 @@
 </div>
 <script>
 const $=id=>document.getElementById(id);let selectedFile=null;
-const supplierPortals = [
-  // MTC
+const supplierPortals = [// A-Point Lease
   {
-    leverancier: "MTC",
-    url: "https://pms.mtc.nl/pls/apx/f?p=115:LOGIN",
-    navigatie: "Rapportage > Overzicht > Uitvoeren (duurt soms heel lang). Kan zijn dat resultaat te groot is en naar Rapportage > Brievenbus wordt gestuurd.",
-    kolommen: "Kenteken, Datum transactie en Kilomerstand",
+    leverancier: "A-Point Lease",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
     portalStatus: ""
   },
-  // Shell FleetHub
+// AA Lease
   {
-    leverancier: "Shell FleetHub",
-    url: "https://account.shell.com/authorize?redirect_uri=https%3A%2F%2Ffleethub.shell.com%2Fmfe%2Flogin&client_id=pbtcss7gsjsy64brt36j4fgxb6gyk8dn&response_type=code&state=%7B%22path%22%3A%22home%22%2C%22nonce%22%3A%22c6c20884-267f-4c2f-9262-bd519bd94343%22%7D&scope=openid&prompt=consent&access_type=offline&ui_locale=en-US",
-    navigatie: "(Nog niet bruikbaar ivm slechte koppeling kentekens) Selecteer entiteit > Rapporten > Overzicht downloaden > Downloadcentrum",
-    kolommen: "NVT",
+    leverancier: "AA Lease",
+    url: "https://dashboard.aalease.nl/Identity/Account/Login?ReturnUrl=%2F",
+    navigatie: "NNB",
+    kolommen: "NNB",
     portalStatus: ""
   },
-  // Ayvens
-  {
-    leverancier: "Ayvens",
-    url: "https://fleetmanager.ayvens.nl/mw2/user/login.xhtml",
-    navigatie: "Rapportages > Rapporten >Tankbeurten OF Kilometrageafwijkingen",
-    kolommen: "Kenteken, Datum. Afstand OF Kenteken, Laatst bekende kilometerstand en Datum laatst bekende kilometerstand",
-    portalStatus: ""
-  },
-  // Arval
-  {
-    leverancier: "Arval",
-    url: "https://www.myarval.com/MyArvalWebTheme/LoginEntry.aspx?OriginalURL=https://www.myarval.com/ArvalSmartExperience/Fleet.aspx",
-    navigatie: "Select Role > My Fleet Status > Rapportages > Tankingen",
-    kolommen: "Kenteken, Factuurdatum, Kmstand OF Geschatte kmstand (indien er weinig kmstanden zijn ingevuld)",
-    portalStatus: ""
-  },
-  // Alphabet
+// Alphabet
   {
     leverancier: "Alphabet",
     url: "https://customer.bmwgroup.com/oneid/",
@@ -73,23 +56,15 @@ const supplierPortals = [
     kolommen: "Brandstofoverzicht: License Plate, Refueling Date, Odometer Reading (Request Date) OF Kilometers rijdende contracten: License Plate, Odometer Reading (Latest Reliable) en Odometer Reading Date (Latest Reliable)",
     portalStatus: ""
   },
-  // Ayvens (ex-Leaseplan)
+// Arval
   {
-    leverancier: "Ayvens (ex-Leaseplan)",
-    url: "https://auth.leaseplan.com/u/login/identifier?state=hqFo2SBqNUJjVTVuNWFXV2c2M3E2YUxDeHRMeVdUd2tKcHotS6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFM2WlZzNjRpbE9ucERuNWxYaUVnWjJkU1hpTWxxRWdZo2NpZNkgZW51MWpPaTFlUmhtcWdvT3R6UWlJazA4ZlVjeEJYajClb3JnaWS0b3JnX3B5Z1pITjhwNHcyN3k3T3anb3JnbmFtZaZheXZlbnM",
-    navigatie: "Vaste rapporten > Brandstof-en laadtransacties OF Huidig wagenpark",
-    kolommen: "Kenteken, Transactiedatum en Km-stand bij tanking OF bij Huidig wagenpark: Kenteken, Laatste bekende km-stand en Datum laatste km-stand",
+    leverancier: "Arval",
+    url: "https://www.myarval.com/MyArvalWebTheme/LoginEntry.aspx?OriginalURL=https://www.myarval.com/ArvalSmartExperience/Fleet.aspx",
+    navigatie: "Select Role > My Fleet Status > Rapportages > Tankingen",
+    kolommen: "Kenteken, Factuurdatum, Kmstand OF Geschatte kmstand (indien er weinig kmstanden zijn ingevuld)",
     portalStatus: ""
   },
-  // VWPFS
-  {
-    leverancier: "VWPFS",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
-    portalStatus: ""
-  },
-  // Athlon
+// Athlon
   {
     leverancier: "Athlon",
     url: "https://login.athlon.com/auth/realms/athlon/protocol/openid-connect/auth?client_id=MyAthlon-public&redirect_uri=https%3A%2F%2Fmy.athlon.com%2F&state=281894e6-a9d0-4e90-9d72-e43ea8608e31&response_mode=query&response_type=code&scope=openid&nonce=9c39a230-1505-4d80-a67f-bd4f8049c9f1&code_challenge=7RYCzbaFOo-1XC1jkLeLcg3WBRRhOXRiIJyqfgGKH9s&code_challenge_method=S256",
@@ -97,31 +72,31 @@ const supplierPortals = [
     kolommen: "Kenteken, Gerapporteerde kilometerstand en Datum kilometerstand OF Geschatte kilometerstand (huidig) en de datum van vandaag gebruiken in de upload",
     portalStatus: ""
   },
-  // J&T
+// AVITAS Autolease B.V.
   {
-    leverancier: "J&T",
-    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=jent",
-    navigatie: "Kilometerstanden",
-    kolommen: "Kenteken, Kilometerstand en Controle datum",
+    leverancier: "AVITAS Autolease B.V.",
+    url: "",
+    navigatie: "NNB",
+    kolommen: "NNB",
+    portalStatus: "NNB"
+  },
+// Ayvens
+  {
+    leverancier: "Ayvens",
+    url: "https://fleetmanager.ayvens.nl/mw2/user/login.xhtml",
+    navigatie: "Rapportages > Rapporten >Tankbeurten OF Kilometrageafwijkingen",
+    kolommen: "Kenteken, Datum. Afstand OF Kenteken, Laatst bekende kilometerstand en Datum laatst bekende kilometerstand",
     portalStatus: ""
   },
-  // Multilease
+// Ayvens (ex-Leaseplan)
   {
-    leverancier: "Multilease",
-    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=multilease",
-    navigatie: "Kilometerstanden",
-    kolommen: "Kenteken, Kilometerstand en Controle datum",
+    leverancier: "Ayvens (ex-Leaseplan)",
+    url: "https://auth.leaseplan.com/u/login/identifier?state=hqFo2SBqNUJjVTVuNWFXV2c2M3E2YUxDeHRMeVdUd2tKcHotS6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFM2WlZzNjRpbE9ucERuNWxYaUVnWjJkU1hpTWxxRWdZo2NpZNkgZW51MWpPaTFlUmhtcWdvT3R6UWlJazA4ZlVjeEJYajClb3JnaWS0b3JnX3B5Z1pITjhwNHcyN3k3T3anb3JnbmFtZaZheXZlbnM",
+    navigatie: "Vaste rapporten > Brandstof-en laadtransacties OF Huidig wagenpark",
+    kolommen: "Kenteken, Transactiedatum en Km-stand bij tanking OF bij Huidig wagenpark: Kenteken, Laatste bekende km-stand en Datum laatste km-stand",
     portalStatus: ""
   },
-  // Udenhout
-  {
-    leverancier: "Udenhout",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
-    portalStatus: ""
-  },
-  // Hiltermann Lease
+// Hiltermann Lease
   {
     leverancier: "Hiltermann Lease",
     url: "https://fleetdisk.amw.autodisk.nl/auth?clt=hiltermannlease",
@@ -129,7 +104,15 @@ const supplierPortals = [
     kolommen: "Kenteken, Kilometerstand en Controle datum",
     portalStatus: ""
   },
-  // MHC Mobility
+// J&T
+  {
+    leverancier: "J&T",
+    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=jent",
+    navigatie: "Kilometerstanden",
+    kolommen: "Kenteken, Kilometerstand en Controle datum",
+    portalStatus: ""
+  },
+// MHC Mobility
   {
     leverancier: "MHC Mobility",
     url: "https://www.mijnwagenpark.nl/Authentication/Login",
@@ -137,71 +120,23 @@ const supplierPortals = [
     kolommen: "Kenteken, Laatste kilometerstand en Datum laatste stand",
     portalStatus: ""
   },
-  // a-point Lease
+// MTC
   {
-    leverancier: "a-point Lease",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    leverancier: "MTC",
+    url: "https://pms.mtc.nl/pls/apx/f?p=115:LOGIN",
+    navigatie: "Rapportage > Overzicht > Uitvoeren (duurt soms heel lang). Kan zijn dat resultaat te groot is en naar Rapportage > Brievenbus wordt gestuurd.",
+    kolommen: "Kenteken, Datum transactie en Kilomerstand",
     portalStatus: ""
   },
-  // Pon Center Lease
+// Multilease
   {
-    leverancier: "Pon Center Lease",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
-    portalStatus: ""
-  },
-  // AA Lease
-  {
-    leverancier: "AA Lease",
-    url: "https://dashboard.aalease.nl/Identity/Account/Login?ReturnUrl=%2F",
-    navigatie: "Nog niet bekend",
-    kolommen: "Nog niet bekend",
-    portalStatus: ""
-  },
-  // Driessen Autolease (Wordt Rebel Lease)
-  {
-    leverancier: "Driessen Autolease (Wordt Rebel Lease)",
-    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=rebellease",
+    leverancier: "Multilease",
+    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=multilease",
     navigatie: "Kilometerstanden",
     kolommen: "Kenteken, Kilometerstand en Controle datum",
     portalStatus: ""
   },
-  // WagenPlan
-  {
-    leverancier: "WagenPlan",
-    url: "",
-    navigatie: "Nog niet bekend",
-    kolommen: "Nog niet bekend",
-    portalStatus: "Nog niet bekend"
-  },
-  // Wealer
-  {
-    leverancier: "Wealer",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Firis.vwpfs.eu%2Fauth%2Frealms%2Fb2b%2Faccount%2Flogin-redirect%3Fpath%3Dapplications&state=0%2F9cf3c31d-308c-5951-16c6-2c5c941e9de4&response_type=code&scope=openid",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
-    portalStatus: ""
-  },
-  // Van Mossel
-  {
-    leverancier: "Van Mossel",
-    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
-    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
-    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
-    portalStatus: ""
-  },
-  // AVITAS Autolease B.V.
-  {
-    leverancier: "AVITAS Autolease B.V.",
-    url: "",
-    navigatie: "Geen portal",
-    kolommen: "Geen portal",
-    portalStatus: "Geen portal"
-  },
-  // Oostendorp Lease
+// Oostendorp Lease
   {
     leverancier: "Oostendorp Lease",
     url: "https://fleetdisk.amw.autodisk.nl/auth?clt=oostendorp",
@@ -209,15 +144,79 @@ const supplierPortals = [
     kolommen: "Kenteken, Kilometerstand en Controle datum",
     portalStatus: ""
   },
-  // Volvo Car Lease
+// Pon Center Lease
+  {
+    leverancier: "Pon Center Lease",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    portalStatus: ""
+  },
+// Rebel Lease
+  {
+    leverancier: "Rebel Lease",
+    url: "https://fleetdisk.amw.autodisk.nl/auth?clt=rebellease",
+    navigatie: "Kilometerstanden",
+    kolommen: "Kenteken, Kilometerstand en Controle datum",
+    portalStatus: ""
+  },
+// Shell FleetHub
+  {
+    leverancier: "Shell FleetHub",
+    url: "https://account.shell.com/authorize?redirect_uri=https%3A%2F%2Ffleethub.shell.com%2Fmfe%2Flogin&client_id=pbtcss7gsjsy64brt36j4fgxb6gyk8dn&response_type=code&state=%7B%22path%22%3A%22home%22%2C%22nonce%22%3A%22c6c20884-267f-4c2f-9262-bd519bd94343%22%7D&scope=openid&prompt=consent&access_type=offline&ui_locale=en-US",
+    navigatie: "(Nog niet bruikbaar ivm slechte koppeling kentekens) Selecteer entiteit > Rapporten > Overzicht downloaden > Downloadcentrum",
+    kolommen: "NVT",
+    portalStatus: ""
+  },
+// Udenhout
+  {
+    leverancier: "Udenhout",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    portalStatus: ""
+  },
+// Van Mossel
+  {
+    leverancier: "Van Mossel",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    portalStatus: ""
+  },
+// Volvo Car Lease
   {
     leverancier: "Volvo Car Lease",
     url: "",
-    navigatie: "Nog niet bekend",
-    kolommen: "Nog niet bekend",
-    portalStatus: "Nog niet bekend"
+    navigatie: "NNB",
+    kolommen: "NNB",
+    portalStatus: "NNB"
   },
-  // XL Lease
+// VWPFS
+  {
+    leverancier: "VWPFS",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGlkIjoiT0h1Rnh2Rmh2bjdIcThpdS15Q2E3QzZxbnJkenE0Q0M0WTB2SVBTY3dlcyIsImlhdCI6MTc4NTgzMjQxOCwiZXhwIjoxNzg2NDM3MjE4fQ.mimUZ7wAkpOAk5l6X4yoA11YVXxyEwsGIAxFlZ_yDXo&scope=openid+profile+email&redirect_uri=https%3A%2F%2Flvboxlscuv9d14e.de.qlikcloud.com%2Flogin%2Fcallback&nonce=ldrL827EhwkUTmrJGrk39InX3CHKQ6glDF_IM2fXVgo&code_challenge=igMcFZKR4WckJSVrjYNEuUlHvmH4MAJllKk5EMAatE0&code_challenge_method=S256&client_id=qlikcloud&response_type=code",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    portalStatus: ""
+  },
+// WagenPlan
+  {
+    leverancier: "WagenPlan",
+    url: "",
+    navigatie: "NNB",
+    kolommen: "NNB",
+    portalStatus: "NNB"
+  },
+// Wealer
+  {
+    leverancier: "Wealer",
+    url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Firis.vwpfs.eu%2Fauth%2Frealms%2Fb2b%2Faccount%2Flogin-redirect%3Fpath%3Dapplications&state=0%2F9cf3c31d-308c-5951-16c6-2c5c941e9de4&response_type=code&scope=openid",
+    navigatie: "Rapportageportaal (Qlik Cloud) > Fleetinformatie > Operationeel > Voertuiggegevens > Rechtsklik op data-veld en Downloaden > Downloaden",
+    kolommen: "Kenteken, Huidige kmstand o.b.v. werkelijk km en de datum van vandaag gebruiken in de upload",
+    portalStatus: ""
+  },
+// XL Lease
   {
     leverancier: "XL Lease",
     url: "https://iris.vwpfs.eu/auth/realms/b2b/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Firis.vwpfs.eu%2Fauth%2Frealms%2Fb2b%2Faccount%2Flogin-redirect%3Fpath%3Dapplications&state=0%2F9cf3c31d-308c-5951-16c6-2c5c941e9de4&response_type=code&scope=openid",
@@ -252,10 +251,10 @@ function buildSupplierGuide(){
     const row=document.createElement('div');row.className='supplier-row';
     const name=document.createElement('div');name.className='supplier-name';name.textContent=item.leverancier;
     const portal=document.createElement('a');portal.className='supplier-portal';portal.textContent='Portal';
-    if(item.url){portal.href=item.url;portal.target='_blank';portal.rel='noopener noreferrer'}else{portal.classList.add('disabled');portal.textContent=item.portalStatus||'Geen portal';portal.setAttribute('aria-disabled','true')}
-    const toggle=document.createElement('button');toggle.type='button';toggle.className='supplier-detail-toggle';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Toon details van '+item.leverancier);toggle.innerHTML='<span>⌄</span>';
-    const nav=document.createElement('div');nav.className='supplier-detail';const navTitle=document.createElement('strong');navTitle.textContent='Navigatie';const navText=document.createElement('span');navText.textContent=item.navigatie||'Nog niet bekend';nav.append(navTitle,navText);
-    const cols=document.createElement('div');cols.className='supplier-detail';const colsTitle=document.createElement('strong');colsTitle.textContent='Kolommen';const colsText=document.createElement('span');colsText.textContent=item.kolommen||'Nog niet bekend';cols.append(colsTitle,colsText);
+    if(item.url){portal.href=item.url;portal.target='_blank';portal.rel='noopener noreferrer'}else{portal.classList.add('disabled');portal.textContent=item.portalStatus||'NNB';portal.setAttribute('aria-disabled','true')}
+    const toggle=document.createElement('button');toggle.type='button';toggle.className='supplier-detail-toggle';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Toon details van '+item.leverancier);toggle.innerHTML='<span>›</span>';
+    const nav=document.createElement('div');nav.className='supplier-detail navigation-detail';const navTitle=document.createElement('strong');navTitle.textContent='Navigatie';const navText=document.createElement('span');navText.textContent=item.navigatie||'NNB';nav.append(navTitle,navText);
+    const cols=document.createElement('div');cols.className='supplier-detail columns-detail';const colsTitle=document.createElement('strong');colsTitle.textContent='Kolommen';const colsText=document.createElement('span');colsText.textContent=item.kolommen||'NNB';cols.append(colsTitle,colsText);
     toggle.addEventListener('click',()=>{const open=!toggle.classList.contains('open');toggle.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));nav.classList.toggle('show',open);cols.classList.toggle('show',open)});
     row.append(name,portal,toggle,nav,cols);supplierGuideContent.appendChild(row);
   });
