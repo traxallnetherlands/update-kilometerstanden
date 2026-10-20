@@ -238,13 +238,96 @@ function median(a){const s=[...a].sort((x,y)=>x-y),n=s.length;return n?s[Math.fl
 function parseKmInput(){const groups=new Map();let ignored=0;for(const line of $('kmInput').value.split(/\r?\n/)){if(!line.trim())continue;let c=line.split('\t');if(c.length<3)c=line.split(/[;,]/);const p=plate(c[0]),km=numberValue(c[1]),date=parseDate(c[2]);if(!p||/kenteken|immat|licenseplate/i.test(c[0]||'')){continue}if(!Number.isFinite(km)||km<100||km>280000||!date){ignored++;continue}if(!groups.has(p))groups.set(p,[]);groups.get(p).push({plate:p,km:Math.round(km),date})}const latest=new Map();for(const [p,rows] of groups){let accepted=rows;if(rows.length>=5){const vals=rows.map(r=>r.km),med=median(vals),mad=median(vals.map(v=>Math.abs(v-med))),limit=Math.max(10000,med*.5,mad*6);accepted=rows.filter(r=>Math.abs(r.km-med)<=limit);ignored+=rows.length-accepted.length}accepted.sort((a,b)=>b.date-a.date||b.km-a.km);if(accepted[0])latest.set(p,accepted[0])}return{latest,ignored}}
 async function readVehicles(file){const wb=new ExcelJS.Workbook();await wb.xlsx.load(await file.arrayBuffer());let best=null;wb.eachSheet(ws=>{for(let r=1;r<=Math.min(ws.rowCount,40);r++){const vals=ws.getRow(r).values.slice(1),ks=vals.map(key);if(ks.includes('immatriculation')&&ks.some(x=>x==='kmveh'||x==='kmvehicule')){best={ws,row:r,headers:vals};return}}});if(!best)throw new Error('Kolom Immatriculation niet gevonden. Controleer de kopregel van Lijst voertuigen.');const map={};best.headers.forEach((h,i)=>map[key(h)]=i+1);const aliases={plate:['immatriculation'],annual:['kmcontrat'],term:['dureecontrat'],currentKm:['kmveh','kmvehicule'],currentDate:['datereleve'],start:['datedebutcontrat'],status:['etat'],statusSince:['etatdepuisle'],finance:['financement'],powertrain:['powertrain'],supplier:['fournisseur']};const col={};for(const [n,arr] of Object.entries(aliases))col[n]=arr.map(a=>map[a]).find(Boolean);const required=['plate','currentKm','currentDate','status','statusSince','finance','supplier'];const missing=required.filter(n=>!col[n]);if(missing.length)throw new Error('Benodigde kolommen ontbreken: '+missing.join(', '));const out=[];for(let r=best.row+1;r<=best.ws.rowCount;r++){const get=n=>col[n]?best.ws.getRow(r).getCell(col[n]).value:'';const p=plate(get('plate'));if(!p)continue;out.push({plate:p,annual:numberValue(get('annual')),term:numberValue(get('term')),currentKm:numberValue(get('currentKm')),currentDate:parseDate(get('currentDate')),start:parseDate(get('start')),status:String(get('status')??'').trim(),statusSince:parseDate(get('statusSince')),finance:String(get('finance')??'').trim(),powertrain:String(get('powertrain')??'').trim(),supplier:String(get('supplier')??'').trim()})}return out}
 async function rdwDate(p){try{const u='https://opendata.rdw.nl/resource/m9d7-ebf2.json?$select=datum_eerste_toelating&$where=kenteken=%27'+encodeURIComponent(p)+'%27&$limit=1';const a=await (await fetch(u)).json();return a[0]?parseDate(a[0].datum_eerste_toelating):null}catch{return null}}
-function excelDate(d){return d instanceof Date&&!isNaN(d)?Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)+25569:null}function days(a,b){return a&&b?Math.round((Date.UTC(a.getFullYear(),a.getMonth(),a.getDate())-Date.UTC(b.getFullYear(),b.getMonth(),b.getDate()))/86400000):null}function financeAllowed(v){return ['OL','OL LEG'].includes(String(v).trim().toUpperCase())}function activeAllowed(v){return ['ACTIEF','INLEVERPROCES BEZIG'].includes(String(v).trim().toUpperCase())}function excluded(v){return String(v.finance).trim().toUpperCase()==='STR'||String(v.status).trim().toUpperCase()==='INACTIEF'}
+function excelDate(d){return d instanceof Date&&!isNaN(d)?Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)+25569:null}function days(a,b){return a&&b?Math.round((Date.UTC(a.getFullYear(),a.getMonth(),a.getDate())-Date.UTC(b.getFullYear(),b.getMonth(),b.getDate()))/86400000):null}function contractDeviation(km,readingDate,contractStart,firstAdmission,annual){
+  if(!Number.isFinite(km)||!readingDate||!contractStart||!Number.isFinite(annual)||annual<=0)return null;
+  const elapsedContract=days(readingDate,contractStart);
+  if(!Number.isFinite(elapsedContract)||elapsedContract<=0)return null;
+  let contractKm=km;
+  if(firstAdmission&&firstAdmission<contractStart){
+    const elapsedVehicle=days(readingDate,firstAdmission);
+    if(Number.isFinite(elapsedVehicle)&&elapsedVehicle>0)contractKm=km*(elapsedContract/elapsedVehicle);
+  }
+  const expectedKm=annual*(elapsedContract/365.25);
+  return expectedKm>0?(contractKm/expectedKm)-1:null;
+}
+function financeAllowed(v){return ['OL','OL LEG'].includes(String(v).trim().toUpperCase())}function activeAllowed(v){return ['ACTIEF','INLEVERPROCES BEZIG'].includes(String(v).trim().toUpperCase())}function excluded(v){return String(v.finance).trim().toUpperCase()==='STR'||String(v.status).trim().toUpperCase()==='INACTIEF'}
 function styleSheet(ws,widths,rightCols=[]){const right=new Set(rightCols);ws.views=[{state:'frozen',ySplit:1}];ws.autoFilter={from:{row:1,column:1},to:{row:Math.max(1,ws.rowCount),column:widths.length}};ws.getRow(1).height=30;ws.getRow(1).eachCell((c,col)=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.blue}};c.font={bold:true,color:{argb:'FF'+C.white}};c.alignment={vertical:'middle',horizontal:'left'};c.border={bottom:{style:'thin',color:{argb:'FF'+C.line}}}});widths.forEach((w,i)=>ws.getColumn(i+1).width=w);for(let r=2;r<=ws.rowCount;r++)ws.getRow(r).eachCell((c,col)=>{c.alignment={vertical:'middle',horizontal:right.has(col)?'right':'left'};c.border={bottom:{style:'hair',color:{argb:'FFE7EBF2'}}}})}
 function cellColor(cell,kind){const x=kind==='g'?[C.lightGreen,C.darkGreen]:kind==='y'?[C.lightYellow,C.darkYellow]:kind==='o'?[C.lightOrange,C.darkOrange]:[C.lightRed,C.darkRed];cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+x[0]}};cell.font={bold:true,color:{argb:'FF'+x[1]}}}
 function dateAgeColor(cell,d){if(!d)return;const now=new Date(),months=(now-d)/(365.25/12*86400000);cellColor(cell,months<2?'g':months<3?'y':months<4?'o':'r')}
-async function buildExport(vehicles,kmData){const eligible=vehicles.filter(v=>!excluded(v));const matched=[],missing=[];for(const v of eligible){const n=kmData.latest.get(v.plate);const lowerThanCurrent=n&&Number.isFinite(v.currentKm)&&n.km<v.currentKm;if(n&&!lowerThanCurrent)matched.push({v,n});else if(financeAllowed(v.finance)&&activeAllowed(v.status))missing.push(v)}for(let i=0;i<matched.length;i+=20){await Promise.all(matched.slice(i,i+20).map(async x=>x.first=await rdwDate(x.v.plate)));prog(true,45+Math.round(35*(i+20)/Math.max(20,matched.length)),`RDW-gegevens ophalen: ${Math.min(i+20,matched.length)} van ${matched.length}`)}const wb=new ExcelJS.Workbook();wb.creator='TraXall';wb.created=new Date();const ws0=wb.addWorksheet('Kentekens zonder km-stand',{properties:{tabColor:{argb:'FFFFC7CE'}}});const h0=['Kenteken','Powertrain','Financiering','Jaarkilometrage','Contractduur','Huidige km-stand','Datum huidige km-stand','Status','Status sinds','Leverancier'];ws0.addRow(h0);missing.sort((a,b)=>(b.currentDate||0)-(a.currentDate||0));missing.forEach(v=>ws0.addRow([v.plate,v.powertrain,v.finance,Number.isFinite(v.annual)?Math.round(v.annual):null,Number.isFinite(v.term)?Math.round(v.term):null,Number.isFinite(v.currentKm)?Math.round(v.currentKm):null,excelDate(v.currentDate),v.status,excelDate(v.statusSince),v.supplier]));styleSheet(ws0,[14,15,14,17,15,18,23,22,16,24],[4,5,6,7,9]);[4,5,6].forEach(c=>ws0.getColumn(c).numFmt='0');[7,9].forEach(c=>ws0.getColumn(c).numFmt='dd-mm-yyyy');for(let r=2;r<=ws0.rowCount;r++)dateAgeColor(ws0.getCell(r,7),missing[r-2]?.currentDate);
-matched.sort((a,b)=>(Number.isFinite(a.v.currentKm)?a.n.km-a.v.currentKm:Number.POSITIVE_INFINITY)-(Number.isFinite(b.v.currentKm)?b.n.km-b.v.currentKm:Number.POSITIVE_INFINITY));const ws1=wb.addWorksheet('Kentekens met km-stand',{properties:{tabColor:{argb:'FFC6EFCE'}}});const h1=['Kenteken','Nieuwe km-stand','Datum nieuwe km-stand','Powertrain','Financiering','Startdatum contract','Datum 1e toelating','Jaarkilometrage','Contractduur','Huidige km-stand','Datum huidige km-stand','Status','Status sinds','Leverancier','Verschil kilometers','Verschil dagen'];ws1.addRow(h1);matched.forEach(x=>{const v=x.v,n=x.n,dk=Number.isFinite(v.currentKm)?Math.round(n.km-v.currentKm):null,dd=v.currentDate?days(n.date,v.currentDate):null;ws1.addRow([v.plate,n.km,excelDate(n.date),v.powertrain,v.finance,excelDate(v.start),excelDate(x.first),Number.isFinite(v.annual)?Math.round(v.annual):null,Number.isFinite(v.term)?Math.round(v.term):null,Number.isFinite(v.currentKm)?Math.round(v.currentKm):null,excelDate(v.currentDate),v.status,excelDate(v.statusSince),v.supplier,dk,dd])});styleSheet(ws1,[14,18,22,15,14,20,19,17,15,18,23,22,16,24,21,16],[2,3,6,7,8,9,10,11,13,15,16]);[2,8,9,10,15,16].forEach(c=>ws1.getColumn(c).numFmt='0');[3,6,7,11,13].forEach(c=>ws1.getColumn(c).numFmt='dd-mm-yyyy');[1,2,3].forEach(c=>{const cell=ws1.getRow(1).getCell(c);cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.green}};cell.font={bold:true,color:{argb:'FFFFFFFF'}};});
-const ws2=wb.addWorksheet('Template upload',{properties:{tabColor:{argb:'FF16875D'}}});ws2.addRow(['immat','kilometrage','date','origine']);if(ws2.rowCount<2)ws2.addRow(['','','','']);ws2.getCell('D2').value='manuelle';ws2.getCell('F3').value="Kopieer-Plak hier je data vanuit het vorige werkblad na controle en dubbelklik 'manuelle' door tot het eind. ";ws2.getCell('F4').value="Kopieer-Plak hierna de kolommen in Trax-It (zie Handleiding in tool).";ws2.getColumn(6).width=95;styleSheet(ws2,[16,16,16,16],[2,3]);ws2.getColumn(2).numFmt='0';ws2.getColumn(3).numFmt='dd-mm-yyyy';ws2.getRow(1).eachCell(c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.green}};c.font={bold:true,color:{argb:'FF'+C.white}}});const buf=await wb.xlsx.writeBuffer();const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Update_kilometerstanden_'+new Date().toISOString().slice(0,10)+'.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);return{eligible:eligible.length,matched:matched.length,missing:missing.length}}
+async function buildExport(vehicles,kmData){
+  const eligible=vehicles.filter(v=>!excluded(v));
+  const matched=[],missing=[];
+  for(const v of eligible){
+    const n=kmData.latest.get(v.plate);
+    const lowerThanCurrent=n&&Number.isFinite(v.currentKm)&&n.km<v.currentKm;
+    const sameReading=n&&Number.isFinite(v.currentKm)&&n.km===v.currentKm&&v.currentDate&&n.date&&days(n.date,v.currentDate)===0;
+    if(n&&!lowerThanCurrent&&!sameReading)matched.push({v,n});
+    else if(financeAllowed(v.finance)&&activeAllowed(v.status))missing.push({v});
+  }
+
+  const rdwRows=[...matched,...missing];
+  for(let i=0;i<rdwRows.length;i+=20){
+    await Promise.all(rdwRows.slice(i,i+20).map(async x=>x.first=await rdwDate(x.v.plate)));
+    prog(true,45+Math.round(35*(i+20)/Math.max(20,rdwRows.length)),`RDW-gegevens ophalen: ${Math.min(i+20,rdwRows.length)} van ${rdwRows.length}`);
+  }
+
+  const wb=new ExcelJS.Workbook();
+  wb.creator='TraXall';
+  wb.created=new Date();
+
+  const ws0=wb.addWorksheet('Kentekens zonder km-stand',{properties:{tabColor:{argb:'FFFFC7CE'}}});
+  const h0=['Kenteken','Nieuwe km-stand','Datum nieuwe km-stand','Powertrain','Financiering','Startdatum contract','Datum 1e toelating','Jaarkilometrage','Contractduur','Huidige km-stand','Datum huidige km-stand','Status','Status sinds','Leverancier','Verschil kilometers','Verschil dagen','Contractafwijking'];
+  ws0.addRow(h0);
+  missing.sort((a,b)=>(b.v.currentDate||0)-(a.v.currentDate||0));
+  missing.forEach(x=>{
+    const v=x.v;
+    const deviation=contractDeviation(v.currentKm,v.currentDate,v.start,x.first,v.annual);
+    ws0.addRow([v.plate,null,null,v.powertrain,v.finance,excelDate(v.start),excelDate(x.first),Number.isFinite(v.annual)?Math.round(v.annual):null,Number.isFinite(v.term)?Math.round(v.term):null,Number.isFinite(v.currentKm)?Math.round(v.currentKm):null,excelDate(v.currentDate),v.status,excelDate(v.statusSince),v.supplier,null,null,deviation]);
+  });
+  styleSheet(ws0,new Array(17).fill(12),[2,3,6,7,8,9,10,11,13,15,16,17]);
+  [2,8,9,10,15,16].forEach(c=>ws0.getColumn(c).numFmt='0');
+  [3,6,7,11,13].forEach(c=>ws0.getColumn(c).numFmt='dd-mm-yyyy');
+  ws0.getColumn(17).numFmt='0.0%';
+  [1,2,3].forEach(c=>{const cell=ws0.getRow(1).getCell(c);cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.green}};cell.font={bold:true,color:{argb:'FFFFFFFF'}};});
+  for(let r=2;r<=ws0.rowCount;r++)dateAgeColor(ws0.getCell(r,11),missing[r-2]?.v.currentDate);
+
+  matched.sort((a,b)=>(Number.isFinite(a.v.currentKm)?a.n.km-a.v.currentKm:Number.POSITIVE_INFINITY)-(Number.isFinite(b.v.currentKm)?b.n.km-b.v.currentKm:Number.POSITIVE_INFINITY));
+  const ws1=wb.addWorksheet('Kentekens met km-stand',{properties:{tabColor:{argb:'FFC6EFCE'}}});
+  const h1=['Kenteken','Nieuwe km-stand','Datum nieuwe km-stand','Powertrain','Financiering','Startdatum contract','Datum 1e toelating','Jaarkilometrage','Contractduur','Huidige km-stand','Datum huidige km-stand','Status','Status sinds','Leverancier','Verschil kilometers','Verschil dagen','Contractafwijking'];
+  ws1.addRow(h1);
+  matched.forEach(x=>{
+    const v=x.v,n=x.n;
+    const dk=Number.isFinite(v.currentKm)?Math.round(n.km-v.currentKm):null;
+    const dd=v.currentDate?days(n.date,v.currentDate):null;
+    const deviation=contractDeviation(n.km,n.date,v.start,x.first,v.annual);
+    ws1.addRow([v.plate,n.km,excelDate(n.date),v.powertrain,v.finance,excelDate(v.start),excelDate(x.first),Number.isFinite(v.annual)?Math.round(v.annual):null,Number.isFinite(v.term)?Math.round(v.term):null,Number.isFinite(v.currentKm)?Math.round(v.currentKm):null,excelDate(v.currentDate),v.status,excelDate(v.statusSince),v.supplier,dk,dd,deviation]);
+  });
+  styleSheet(ws1,new Array(17).fill(12),[2,3,6,7,8,9,10,11,13,15,16,17]);
+  [2,8,9,10,15,16].forEach(c=>ws1.getColumn(c).numFmt='0');
+  [3,6,7,11,13].forEach(c=>ws1.getColumn(c).numFmt='dd-mm-yyyy');
+  ws1.getColumn(17).numFmt='0.0%';
+  [1,2,3].forEach(c=>{const cell=ws1.getRow(1).getCell(c);cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.green}};cell.font={bold:true,color:{argb:'FFFFFFFF'}};});
+
+  const ws2=wb.addWorksheet('Template upload',{properties:{tabColor:{argb:'FF16875D'}}});
+  ws2.addRow(['immat','kilometrage','date','origine']);
+  if(ws2.rowCount<2)ws2.addRow(['','','','']);
+  ws2.getCell('D2').value='manuelle';
+  ws2.getCell('F3').value="Kopieer-Plak hier je data vanuit het vorige werkblad na controle en dubbelklik 'manuelle' door tot het eind. ";
+  ws2.getCell('F4').value="Kopieer-Plak hierna de kolommen in Trax-It (zie Handleiding in tool).";
+  ws2.getColumn(6).width=95;
+  styleSheet(ws2,[12,12,12,12],[2,3]);
+  ws2.getColumn(2).numFmt='0';
+  ws2.getColumn(3).numFmt='dd-mm-yyyy';
+  ws2.getRow(1).eachCell(c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+C.green}};c.font={bold:true,color:{argb:'FF'+C.white}}});
+
+  const buf=await wb.xlsx.writeBuffer();
+  const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Update_kilometerstanden_'+new Date().toISOString().slice(0,10)+'.xlsx';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  return{eligible:eligible.length,matched:matched.length,missing:missing.length};
+}
 async function run(){try{if(!selectedFile)throw new Error('Upload eerst Lijst voertuigen.');if(!$('kmInput').value.trim())throw new Error('Plak eerst kilometerstanden.');$('process').disabled=true;prog(true,5,'Kilometerstanden controleren...');const km=parseKmInput();prog(true,18,'Lijst voertuigen uitlezen...');const vehicles=await readVehicles(selectedFile);prog(true,35,'Voertuigen vergelijken...');const s=await buildExport(vehicles,km);exportSuccess()}catch(e){console.error(e);prog(false);setStatus(e.message||'Verwerking mislukt','error')}finally{$('process').disabled=!selectedFile}}
 function selectFile(f){if(!f||!(/\.xlsx?$/i.test(f.name))){setStatus('Selecteer een geldig Excelbestand (.xlsx of .xls).','error');return}selectedFile=f;$('fileName').textContent=f.name;$('process').disabled=false;setStatus('Lijst voertuigen geselecteerd','info')}
 const vehicleFile=$('vehicleFile'),dropzone=$('dropzone');vehicleFile.addEventListener('change',e=>{const f=e.currentTarget.files&&e.currentTarget.files.item(0);if(f)selectFile(f)});dropzone.addEventListener('dragenter',e=>{e.preventDefault();e.stopPropagation();dropzone.classList.add('drag')});dropzone.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();e.dataTransfer.dropEffect='copy';dropzone.classList.add('drag')});dropzone.addEventListener('dragleave',e=>{e.preventDefault();e.stopPropagation();dropzone.classList.remove('drag')});dropzone.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();dropzone.classList.remove('drag');const f=e.dataTransfer.files&&e.dataTransfer.files.item(0);if(f)selectFile(f)});$('process').onclick=run;$('clear').onclick=()=>{selectedFile=null;$('vehicleFile').value='';$('kmInput').value='';$('fileName').textContent='Nog geen bestand geselecteerd';$('process').disabled=true;prog(false);setStatus('Wachten op invoer','info')};const supplierGuideToggle=$('supplierGuideToggle'),supplierGuideContent=$('supplierGuideContent');
