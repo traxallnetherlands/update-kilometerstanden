@@ -274,10 +274,7 @@ const olderThanCurrentDate =
 const sameReading =
     n &&
     Number.isFinite(v.currentKm) &&
-    n.km === v.currentKm &&
-    v.currentDate &&
-    n.date &&
-    days(n.date, v.currentDate) === 0;
+    n.km === v.currentKm;
 
 if (
     n &&
