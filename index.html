@@ -259,10 +259,39 @@ async function buildExport(vehicles,kmData){
   const matched=[],missing=[];
   for(const v of eligible){
     const n=kmData.latest.get(v.plate);
-    const lowerThanCurrent=n&&Number.isFinite(v.currentKm)&&n.km<v.currentKm;
-    const sameReading=n&&Number.isFinite(v.currentKm)&&n.km===v.currentKm&&v.currentDate&&n.date&&days(n.date,v.currentDate)===0;
-    if(n&&!lowerThanCurrent&&!sameReading)matched.push({v,n});
-    else if(financeAllowed(v.finance)&&activeAllowed(v.status))missing.push({v});
+
+const lowerThanCurrent =
+    n &&
+    Number.isFinite(v.currentKm) &&
+    n.km < v.currentKm;
+
+const olderThanCurrentDate =
+    n &&
+    v.currentDate &&
+    n.date &&
+    n.date < v.currentDate;
+
+const sameReading =
+    n &&
+    Number.isFinite(v.currentKm) &&
+    n.km === v.currentKm &&
+    v.currentDate &&
+    n.date &&
+    days(n.date, v.currentDate) === 0;
+
+if (
+    n &&
+    !lowerThanCurrent &&
+    !olderThanCurrentDate &&
+    !sameReading
+) {
+    matched.push({ v, n });
+} else if (
+    financeAllowed(v.finance) &&
+    activeAllowed(v.status)
+) {
+    missing.push({ v });
+}
   }
 
   const rdwRows=[...matched,...missing];
